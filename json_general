@@ -1,0 +1,801 @@
+{
+  "form": {
+	"title": "#TITLE_FORMULARIO#",
+	"description": "#DESCRIPTION_FORMULARIO#",
+	"pages": [
+	  {
+		"label": "Datos del promotor de formaci\u00F3n",
+		"sections": [
+		  [
+			{
+			  "scope": "general",
+			  "rows": [
+				{
+				  "columns": [
+					{
+					  "size-xs": "12",
+					  "size-sm": "8",
+					  "size-md": "8",
+					  "size-lg": "8",
+					  "label": "Nota: Los datos personales del usuario correspondiente al apartado 2 \"DATOS PERSONALES\" ser\u00E1 cargado desde el sistema de GALATEA si el usuario est\u00E1 registrado en el sistema, prevaleciendo los datos importados desde GALATEA sobre cualquier dato insertado por el usuario."
+					},
+					{
+					  "size-xs": "12",
+					  "size-sm": "3",
+					  "size-md": "3",
+					  "size-lg": "3"
+					},
+					{
+					  "size-xs": "12",
+					  "size-sm": "1",
+					  "size-md": "1",
+					  "size-lg": "1",
+					  "label": "Versi\u00F3n:",
+					  "layout": "default",
+					  "element": {
+						"tag": "select",
+						"id": "version",
+						"values": [
+						  {
+							"value": "#DINAMIC_VERSIONUMBER#",
+							"label": "#DINAMIC_VERSIONUMBER#"
+						  }
+						]
+					  }
+					}
+				  ]
+				}
+			  ]
+			}
+		  ],
+		  [
+			{
+			  "title": "1 DATOS DEL SOLICITANTE",
+			  "scope": "general",
+			  "rows": [
+				{
+				  "columns": [
+					{
+					  "size-xs": "12",
+					  "size-sm": "12",
+					  "size-md": "12",
+					  "size-lg": "12",
+					}
+				  ]
+				}
+				,
+				#DINAMIC_PREFERENCIAS#
+				,  
+				{
+				  "columns": [
+					{
+					  "size-xs": "12",
+					  "size-sm": "12",
+					  "size-md": "12",
+					  "size-lg": "12",
+					  "label": "Cupo de Reserva",
+					  "layout": "default",
+					  "element": {
+						"tag": "radio",
+						"type": "vertical",
+						"id": "cupoReserva",
+						"values": [
+						  {
+							"value": "1",
+							"label": "Si"
+						  },
+						  {
+							"value": "0",
+							"label": "No"
+						  }
+						]
+					  }
+					}
+				  ]
+				},
+				{
+				  "columns": [
+					{
+					  "size-xs": "12",
+					  "size-sm": "12",
+					  "size-md": "12",
+					  "size-lg": "12",
+					  "label": "Discapacidad",
+					  "layout": "default",
+					  "element": {
+						"tag": "radio",
+						"type": "vertical",
+						"id": "poseeDiscapacidad",
+						"values": [
+						  {
+							"value": "1",
+							"label": "Si"
+						  },
+						  {
+							"value": "0",
+							"label": "No"
+						  }
+						]
+					  }
+					}
+				  ]
+				},
+				{
+				  "columns": [
+					{
+					  "size-xs": "12",
+					  "size-sm": "12",
+					  "size-md": "12",
+					  "size-lg": "12",
+					  "label": "Autorizaci\u00F3n Expresa de consulta",
+					  "layout": "default",
+					  "element": {
+						"tag": "radio",
+						"type": "vertical",
+						"id": "autorizadoConsulta",
+						"values": [
+						  {
+							"value": "1",
+							"label": "Si"
+						  },
+						  {
+							"value": "0",
+							"label": "No"
+						  }
+						]
+					  }
+					}
+				  ]
+				},
+				{
+				  "columns": [
+					{
+					  "size-xs": "12",
+					  "size-sm": "12",
+					  "size-md": "12",
+					  "size-lg": "12",
+					  "label": "Excedencia arts. 89.3, 89.4 y 89.5 EBEP",
+					  "layout": "default",
+					  "element": {
+						"tag": "radio",
+						"type": "vertical",
+						"id": "excedenciaEBEP",
+						"values": [
+						  {
+							"value": "1",
+							"label": "Si"
+						  },
+						  {
+							"value": "0",
+							"label": "No"
+						  }
+						]
+					  }
+					}
+				  ]
+				}
+
+			  ]
+			}
+		  ]
+		]
+	  },
+	  {
+		"label": "Datos personales",
+		"sections": [
+		  [		  
+			{
+			  "title": "2 DATOS PERSONALES",
+			  "scope": "general",
+			  "rows": [
+				{
+				  "columns": [
+					{
+					  "size-xs": "12",
+					  "size-sm": "12",
+					  "size-md": "12",
+					  "size-lg": "12",
+					  "label": "DNI/NIF:",
+					  "layout": "default",
+					  "element": {
+						"tag": "input",
+						"type": "text",
+						"id": "identifSolicitante",
+						"required": "El campo DNI/NIF del solicitante es obligatorio",
+						"calculated": {	
+						  "method": "raw",
+						  "expresion": "import groovy.json.JsonOutput;import groovy.json.JsonSlurper;def jsonSlurper = new JsonSlurper();def object = jsonSlurper.parseText(jsonData);object.identifSolicitante = param;def url = '#DINAMIC_URL_PARAMETRICA#/persona/'+param;def get = new URL(url).openConnection();def status = get.getResponseCode();if (status.equals(200)) {def response = get.getInputStream().getText();def respondeNode = jsonSlurper.parseText(response);if (object.nombreSolicitante == null) {object.nombreSolicitante = respondeNode.nombreSolicitante != null ? respondeNode.nombreSolicitante : '';}\nif (object.apellido1Solicitante == null) {object.apellido1Solicitante = respondeNode.apellido1Solicitante != null ? respondeNode.apellido1Solicitante: '';}\nif (object.apellido2Solicitante == null) {object.apellido2Solicitante = respondeNode.apellido2Solicitante != null ? respondeNode.apellido2Solicitante : '';}\nif (object.sexoSolicitante == null) {object.sexoSolicitante = respondeNode.sexoSolicitante != null ? respondeNode.sexoSolicitante : '';}\nif (object.emailSolicitante == null) {object.emailSolicitante = respondeNode.emailSolicitante != null ? respondeNode.emailSolicitante : '';}\nif (object.telefonoSolicitante == null) {object.telefonoSolicitante = respondeNode.telefonoSolicitante != null ? respondeNode.telefonoSolicitante : '';}\n}\njsonData = JsonOutput.toJson(object);"
+						}
+					  }
+					}
+				  ]
+				},
+				{
+				  "columns": [
+					{
+					  "size-xs": "12",
+					  "size-sm": "12",
+					  "size-md": "12",
+					  "size-lg": "12",
+					  "label": "Nombre Solicitante:",
+					  "layout": "default",
+					  "element": {
+						"tag": "input",
+						"type": "text",
+						"id": "nombreSolicitante",
+						"required": "El campo Nombre Solicitante es obligatorio",
+						"parameters": {
+							"maxlength": "50"
+						}
+					  }
+					}
+				  ]
+				},
+				{
+				  "columns": [
+					{
+					  "size-xs": "12",
+					  "size-sm": "12",
+					  "size-md": "12",
+					  "size-lg": "12",
+					  "label": "Apellido 1 Solicitante:",
+					  "layout": "default",
+					  "element": {
+						"tag": "input",
+						"type": "text",
+						"id": "apellido1Solicitante",
+						"required": "El campo Apellido 1 Solicitante es obligatorio",
+						"parameters": {
+							"maxlength": "50"
+						}
+					  }
+					}
+				  ]
+				},
+				{
+				  "columns": [
+					{
+					  "size-xs": "12",
+					  "size-sm": "12",
+					  "size-md": "12",
+					  "size-lg": "12",
+					  "label": "Apellido 2 Solicitante:",
+					  "layout": "default",
+					  "element": {
+						"tag": "input",
+						"type": "text",
+						"id": "apellido2Solicitante",
+						"required": "El campo Apellido 2 Solicitante es obligatorio",
+						"parameters": {
+							"maxlength": "50"
+						}
+					  }
+					}
+				  ]
+				},
+				{
+				  "columns": [
+					{
+					  "size-xs": "12",
+					  "size-sm": "12",
+					  "size-md": "12",
+					  "size-lg": "12",
+					  "label": "Sexo:",
+					  "layout": "default",
+					  "element": {
+						"tag": "select",
+						"id": "sexoSolicitante",
+						"required": "El campo Sexo es obligatorio",
+						"values": [
+						  {
+							"value": "",
+							"label": ""
+						  },
+						  {
+							"value": "hombre",
+							"label": "Hombre"
+						  },
+						  {
+							"value": "mujer",
+							"label": "Mujer"
+						  }
+						]
+					  }
+					}
+				  ]
+				},
+				{
+				  "columns": [
+					{
+					  "size-xs": "12",
+					  "size-sm": "12",
+					  "size-md": "12",
+					  "size-lg": "12",
+					  "label": "Correo Electr\u00F3nico Corporativo:",
+					  "layout": "default",
+					  "element": {
+						"tag": "input",
+						"type": "email",
+						"id": "emailSolicitante",
+						"required": "El campo Correo Electr\u00F3nico Corporativo es obligatorio",
+						"parameters": {
+							"maxlength": "100"
+						}
+					  }
+					}
+				  ]
+				},
+				{
+				  "columns": [
+					{
+					  "size-xs": "12",
+					  "size-sm": "12",
+					  "size-md": "12",
+					  "size-lg": "12",
+					  "label": "Tel\u00E9fono de contacto:",
+					  "layout": "default",
+					  "element": {
+						"tag": "input",
+						"type": "text",
+						"id": "telefonoSolicitante",
+						"parameters": {
+							"maxlength": "9"
+						}
+					  }
+					}
+				  ]
+				}
+				#DINAMIC_CAMPORPER#
+			  ]
+			}
+		  ]
+		]
+	  },
+	  {
+		"label": "Datos administrativos",
+		"sections": [
+		  [
+			{
+			  "title": "2 DATOS ADMINISTRATIVOS",
+			  "scope": "general",
+			  "rows": [
+				{
+				  "columns": [
+					{
+					  "size-xs": "12",
+					  "size-sm": "12",
+					  "size-md": "12",
+					  "size-lg": "12",
+					  "label": "Colectivo:",
+					  "layout": "default",
+					  "element": {
+						"tag": "select",
+						"id": "tipoColectivo",
+						"values": [
+						  {
+							"label": "",
+							"value": ""
+						  },
+						  {
+							"label": "Funcionario",
+							"value": "funcionario"
+						  },
+						  {
+							"label": "Laboral",
+							"value": "laboral"
+						  },
+						  {
+							"label": "Interino",
+							"value": "interino"
+						  },
+						  {
+							"label": "Otro",
+							"value": "otros"
+						  }
+						]
+					  }
+					}
+				  ]
+				},
+				{
+				  "columns": [
+					{
+					  "size-xs": "12",
+					  "size-sm": "12",
+					  "size-md": "12",
+					  "size-lg": "12",
+					  "label": "Categoria:",
+					  "layout": "default",
+					  "element": {
+						"tag": "select",
+						"id": "categoria",
+						"dynamic": {
+						  "url": "#DINAMIC_URL_PARAMETRICA#/categorias",
+						  "default": true,
+						  "key": "codigo",
+						  "value": "descripcion",
+						  "script": "def get = new URL(url).openConnection();def status = get.getResponseCode();if (status.equals(200)) {response = '{\"status\":'+status+',\"result\":'+get.getInputStream().getText()+'}'}\n else {response = '{\"status\":'+status+'}'}\n"
+						}
+					  }
+					}
+				  ]
+				},
+				{
+				  "columns": [
+					{
+					  "size-xs": "12",
+					  "size-sm": "12",
+					  "size-md": "12",
+					  "size-lg": "12",
+					  "label": "Grupo:",
+					  "layout": "default",
+					  "element": {
+						"tag": "select",
+						"id": "grupo",
+						"dynamic": {
+						  "url": "#DINAMIC_URL_PARAMETRICA#/grupos",
+						  "default": true,
+						  "key": "codigo",
+						  "value": "descripcion",
+						  "script": "def get = new URL(url).openConnection();def status = get.getResponseCode();if (status.equals(200)) {response = '{\"status\":'+status+',\"result\":'+get.getInputStream().getText()+'}'}\n else {response = '{\"status\":'+status+'}'}\n"
+						}
+					  }
+					}
+				  ]
+				},
+				{
+				  "columns": [
+					{
+					  "size-xs": "12",
+					  "size-sm": "12",
+					  "size-md": "12",
+					  "size-lg": "12",
+					  "label": "Cuerpo:",
+					  "layout": "default",
+					  "element": {
+						"tag": "input",
+						"type": "text",
+						"id": "cuerpo",
+						"required": "El campo Cuerpo es obligatorio"
+					  }
+					}
+				  ]
+				},
+				{
+				  "columns": [
+					{
+					  "size-xs": "12",
+					  "size-sm": "12",
+					  "size-md": "12",
+					  "size-lg": "12",
+					  "label": "C\u00F3digo puesto:",
+					  "layout": "default",
+					  "element": {
+						"tag": "input",
+						"type": "number",
+						"id": "puestoTrabajoCodigo",
+						"required": "El campo C\u00F3digo puesto es obligatorio",
+						"parameters": {
+							"maxlength": "12"
+						}
+					  }
+					}
+				  ]
+				},
+				{
+				  "columns": [
+					{
+					  "size-xs": "12",
+					  "size-sm": "12",
+					  "size-md": "12",
+					  "size-lg": "12",
+					  "label": "Denominaci\u00F3n puesto:",
+					  "layout": "default",
+					  "element": {
+						"tag": "input",
+						"type": "text",
+						"id": "puesto",
+						"required": "El campo Denominaci\u00F3n puesto es obligatorio",
+						"parameters": {
+							"maxlength": "50"
+						}
+					  }
+					}
+				  ]
+				},
+				{
+				  "columns": [
+					{
+					  "size-xs": "12",
+					  "size-sm": "12",
+					  "size-md": "12",
+					  "size-lg": "12",
+					  "label": "Nivel:",
+					  "layout": "default",
+					  "element": {
+						"tag": "input",
+						"type": "text",
+						"id": "nivel",
+						"required": "El campo Nivel es obligatorio",
+						"parameters": {
+							"maxlength": "2"
+						}
+					  }
+					}
+				  ]
+				},
+				{
+				  "columns": [
+					{
+					  "size-xs": "12",
+					  "size-sm": "12",
+					  "size-md": "12",
+					  "size-lg": "12",
+					  "label": "Fecha toma posesi\u00F3n",
+					  "layout": "default",
+					  "element": {
+						"tag": "input",
+						"type": "date",
+						"id": "fechaTomaPosesion",
+						"required": "El campo Fecha toma posesi\u00F3n es obligatorio"
+					  }
+					}
+				  ]
+				},
+				{
+				  "columns": [
+					{
+					  "size-xs": "12",
+					  "size-sm": "12",
+					  "size-md": "12",
+					  "size-lg": "12",
+					  "label": "Consejer\u00EDa/OA/Otros:",
+					  "layout": "default",
+					  "element": {
+						"tag": "select",
+						"id": "conserjeriaOAOtros",
+						"dynamic": {
+						  "url": "#DINAMIC_URL_PARAMETRICA#/organismos",
+						  "default": true,
+						  "key": "codigo",
+						  "value": "descripcion",
+						  "script": "def get = new URL(url).openConnection();def status = get.getResponseCode();if (status.equals(200)) {response = '{\"status\":'+status+',\"result\":'+get.getInputStream().getText()+'}'}\n else {response = '{\"status\":'+status+'}'}\n"
+						}
+					  }
+					}
+				  ]
+				},
+				{
+				  "columns": [
+					{
+					  "size-xs": "12",
+					  "size-sm": "12",
+					  "size-md": "12",
+					  "size-lg": "12",
+					  "label": "Centro de trabajo/\u00D3rgano:",
+					  "layout": "default",
+					  "element": {
+						"tag": "input",
+						"type": "text",
+						"id": "centroTrabajo",
+						"required": "El campo Centro de trabajo/\u00D3rgano es obligatorio"
+					  }
+					}
+				  ]
+				},
+				{
+				  "columns": [
+					{
+					  "size-xs": "12",
+					  "size-sm": "2",
+					  "size-md": "2",
+					  "size-lg": "2",
+					  "label": "Provincia:",
+					  "layout": "default",
+					  "element": {
+						"tag": "select",
+						"id": "codProvincia",
+						"dynamic": {
+						  "url": "#DINAMIC_URL_PARAMETRICA#/provincias",
+						  "default": true,
+						  "key": "codigo",
+						  "value": "descripcion",
+						  "script": "def get = new URL(url).openConnection();def status = get.getResponseCode();if (status.equals(200)) {response = '{\"status\":'+status+',\"result\":'+get.getInputStream().getText()+'}'}\n else {response = '{\"status\":'+status+'}'}\n"
+						}
+					  }
+					}
+				  ]
+				},
+				{
+				  "columns": [
+					{
+					  "size-xs": "12",
+					  "size-sm": "12",
+					  "size-md": "12",
+					  "size-lg": "12",
+					  "label": "C\u00F3digo Postal:",
+					  "layout": "default",
+					  "element": {
+						"tag": "input",
+						"type": "text",
+						"id": "codPostalAdministracion",
+						"required": "El campo C\u00F3digo Postal es obligatorio",
+						"parameters": {
+							"maxlength": "5"
+						}
+					  }
+					}
+				  ]
+				},
+				{
+				  "columns": [
+					{
+					  "size-xs": "12",
+					  "size-sm": "12",
+					  "size-md": "12",
+					  "size-lg": "12",
+					  "label": "Antig\u00FCedad admin.:",
+					  "layout": "default",
+					  "element": {
+						"tag": "input",
+						"type": "number",
+						"id": "antiguedad",
+						"required": "El campo Antig\u00FCedad admin. es obligatorio"
+					  }
+					}
+				  ]
+				},
+				
+			  ]
+			}
+		  ]
+		]
+	  },
+	  {
+		"label": "Declaraci\u00F3n, solicitud, lugar, fecha y firmante",
+		"sections": [
+		  [
+			{
+			  "title": "4 DECLARA, SOLICITUD, LUGAR, FECHA Y FIRMA",
+			  "scope": "general",
+			  "rows": [
+				{
+				  "columns": [
+					{
+					  "size-xs": "12",
+					  "size-sm": "3",
+					  "size-md": "3",
+					  "size-lg": "3"
+					},
+					{
+					  "size-xs": "12",
+					  "size-sm": "4",
+					  "size-md": "4",
+					  "size-lg": "4",
+					  "label": "EN",
+					  "layout": "default",
+					  "element": {
+						"tag": "input",
+						"type": "text",
+						"id": "lugarAltaSolicitud",
+						"required": "El campo Lugar Alta Solicitud es obligatorio"
+					  }
+					},
+					{
+					  "size-xs": "12",
+					  "size-sm": "1",
+					  "size-md": "1",
+					  "size-lg": "1",
+					  "label": "a",
+					  "layout": "default",
+					  "element": {
+						"tag": "input",
+						"type": "number",
+						"id": "diaAltaSolicitud",
+						"required": "El campo D\u00EDa Alta Solicitud es obligatorio"
+					  }
+					},
+					{
+					  "size-xs": "12",
+					  "size-sm": "1",
+					  "size-md": "1",
+					  "size-lg": "1",
+					  "label": "de (mes)",
+					  "layout": "default",
+					  "element": {
+						"tag": "input",
+						"type": "number",
+						"id": "mesAltaSolicitud",
+						"required": "El campo Mes Alta Solicitud es obligatorio"
+					  }
+					},
+					{
+					  "size-xs": "12",
+					  "size-sm": "1",
+					  "size-md": "1",
+					  "size-lg": "1",
+					  "label": "de (a&ntilde;o)",
+					  "layout": "default",
+					  "element": {
+						"tag": "input",
+						"type": "number",
+						"id": "yearAltaSolicitud",
+						"required": "El campo A\u00F1o Alta Solicitud es obligatorio"
+					  }
+					},
+					{
+					  "size-xs": "12",
+					  "size-sm": "3",
+					  "size-md": "3",
+					  "size-lg": "3"
+					}
+				  ]
+				},
+				{
+				  "columns": [
+					{
+					  "size-xs": "12",
+					  "size-sm": "4",
+					  "size-md": "4",
+					  "size-lg": "4"
+					},
+					{
+					  "size-xs": "12",
+					  "size-sm": "4",
+					  "size-md": "4",
+					  "size-lg": "4",
+					  "label": "EL/LA:",
+					  "layout": "default",
+					  "element": {
+						"tag": "input",
+						"type": "text",
+						"id": "nombreCompletoSolicitante",
+						"required": "El campo Nombre Completo Solicitante es obligatorio"
+					  }
+					},
+					{
+					  "size-xs": "12",
+					  "size-sm": "4",
+					  "size-md": "4",
+					  "size-lg": "4"
+					}
+				  ]
+				},
+				{
+				  "columns": [
+					{
+					  "size-xs": "12",
+					  "size-sm": "4",
+					  "size-md": "4",
+					  "size-lg": "4"
+					},
+					{
+					  "size-xs": "12",
+					  "size-sm": "4",
+					  "size-md": "4",
+					  "size-lg": "4",
+					  "label": "Fdo.:",
+					  "layout": "default",
+					  "element": {
+						"tag": "input",
+						"type": "text",
+						"id": "firmanteSolicitud",
+						"required": "El campo Firmante Solicitud es obligatorio"
+					  }
+					},
+					{
+					  "size-xs": "12",
+					  "size-sm": "4",
+					  "size-md": "4",
+					  "size-lg": "4"
+					}
+				  ]
+				}
+			  ]
+			}
+		  ]
+		]
+	  }
+	]
+  }
+}
